@@ -40,7 +40,40 @@ describe("Teste E2E - Realizando a compra de produtos com sucesso", () => {
     cy.get('[data-test="back-to-products"]').click();
 
     //Checagem da quantidade de produtos adicionados ao carrinho
-
     cy.get(".shopping_cart_link").should("have.text", "3");
+    //check no carrinho
+    cy.get(".shopping_cart_link").click();
+    cy.get(".cart_list > :nth-child(3)").should("contain", "Sauce Labs Onesie");
+    cy.get(".cart_list > :nth-child(4)").should(
+      "contain",
+      "Sauce Labs Bike Light"
+    );
+    cy.get(".cart_list > :nth-child(5)").should(
+      "contain",
+      "Sauce Labs Bolt T-Shirt"
+    );
+
+    //Checkout:
+    cy.get('[data-test="checkout"]').click();
+    cy.get('[data-test="firstName"]').type("Teste Primeiro Nome");
+    cy.get('[data-test="lastName"]').type("Teste ultimo Nome");
+    cy.get('[data-test="postalCode"]').type("6565656");
+    cy.get('[data-test="continue"]').click();
+    //Verificando produtos no checkout
+    cy.get(".cart_list > :nth-child(3)").should("contain", "Sauce Labs Onesie");
+    cy.get(".cart_list > :nth-child(4)").should(
+      "contain",
+      "Sauce Labs Bike Light"
+    );
+    cy.get(".cart_list > :nth-child(5)").should(
+      "contain",
+      "Sauce Labs Bolt T-Shirt"
+    );
+
+    //checagem no valor total:
+    cy.get(".summary_total_label").should("have.text", "Total: $36.69");
+    cy.get('[data-test="finish"]').click();
+
+    cy.get(".complete-header").should("have.text", "Thank you for your order!");
   });
 });
